@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TripMate – Mini Bus Booking</title>
+  <link rel="stylesheet" href="assets/style/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="assets/images/bus.png" alt="TripMate Logo" class="nav-logo">
+      <span class="nav-title">TripMate</span>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="nav-home">Home</a>
+      <a href="#" id="nav-info" class="guest-user-only">Info</a>
+      <a href="#" id="nav-contact" class="guest-user-only">Contact</a>
+      <a href="#" id="nav-admin" class="admin-only hidden">Admin</a>
+      <a href="#" id="nav-report" class="admin-only hidden">Report</a>
+      <a href="#" id="nav-mybookings" class="user-only hidden">My Bookings</a>
+      <button id="nav-logout-btn" class="btn logout-btn hidden">Logout</button>
+    </div>
+  </nav>
+
+  <div id="notification" class="hidden"></div>
+
+  <div id="landing-page" class="landing">
+    <img src="assets/images/bus.png" alt="Bus illustration" class="landing-image">
+    <h2>Welcome to TripMate</h2>
+    <p>Book your bus tickets quickly and easily.</p>
+    <div class="btn-row">
+      <button id="go-login" class="btn primary">Login</button>
+      <button id="go-register" class="btn secondary">Register</button>
+    </div>
+  </div>
+
+  <div id="register-page" class="hidden card">
+    <img src="assets/images/bus.png" alt="Bus Registration" class="form-image">
+    <h3>Register</h3>
+    <form id="register-form">
+      <label>Username:</label>
+      <input type="text" id="reg-username" required>
+      <label>Password:</label>
+      <input type="password" id="reg-password" required>
+      <button type="submit" class="btn primary">Register</button>
+      <button type="button" id="back-register" class="btn secondary">Back</button>
+    </form>
+  </div>
+
+  <div id="login-page" class="hidden card">
+    <img src="assets/images/bus.png" alt="Bus Login" class="form-image">
+    <h3>Login</h3>
+    <form id="login-form">
+      <label>Username:</label>
+      <input type="text" id="login-username" required>
+      <label>Password:</label>
+      <input type="password" id="login-password" required>
+      <button type="submit" class="btn primary">Login</button>
+      <button type="button" id="back-login" class="btn secondary">Back</button>
+    </form>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <h2>Find Your Bus</h2>
+    <div class="search-box card">
+      <label>From:</label>
+      <select id="from-location">
+        <option value="">Select Departure</option>
+        <option value="Kuala Lumpur">Kuala Lumpur</option>
+        <option value="Penang">Penang</option>
+        <option value="Johor Bahru">Johor Bahru</option>
+        <option value="Melaka">Melaka</option>
+        <option value="Ipoh">Ipoh</option>
+        <option value="Kuantan">Kuantan</option>
+        <option value="Seremban">Seremban</option>
+        <option value="Alor Setar">Alor Setar</option>
+        <option value="Georgetown">Georgetown</option>
+      </select>
+
+      <label>To:</label>
+      <select id="to-location">
+        <option value="">Select Destination</option>
+        <option value="Kuala Lumpur">Kuala Lumpur</option>
+        <option value="Penang">Penang</option>
+        <option value="Johor Bahru">Johor Bahru</option>
+        <option value="Melaka">Melaka</option>
+        <option value="Ipoh">Ipoh</option>
+        <option value="Kuantan">Kuantan</option>
+        <option value="Seremban">Seremban</option>
+        <option value="Alor Setar">Alor Setar</option>
+        <option value="Georgetown">Georgetown</option>
+      </select>
+
+      <button id="search-route" class="btn primary" style="margin-top:10px;">Search</button>
+    </div>
+
+    <h3 style="margin-top: 30px;">Available Routes</h3>
+    <div id="routes-container"></div>
+  </div>
+
+  <div id="booking-page" class="hidden card">
+    <h3 id="route-title"></h3>
+    <p id="route-desc"></p>
+    <p><strong>Available Time Slots:</strong></p>
+    <div id="time-slots-display"></div>
+    <form id="booking-form">
+      <label>Select Time Slot:</label>
+      <select id="selected-time-slot" required></select>
+      <label>Number of seats:</label>
+      <input type="number" id="book-seats" min="1" value="1" required>
+      <button type="submit" class="btn primary">Confirm Booking</button>
+      <button type="button" id="back-dashboard" class="btn secondary">Back</button>
+    </form>
+  </div>
+
+  <div id="mybookings-page" class="hidden card">
+    <h3>My Bookings</h3>
+    <div id="my-bookings-list"></div>
+    <button type="button" id="back-from-mybookings" class="btn secondary">Back</button>
+  </div>
+
+  <div id="admin-page" class="hidden card">
+    <h3>Admin - Create Bus Schedule</h3>
+    <form id="admin-create-form">
+      <label>Route Title:</label>
+      <input type="text" id="admin-title" placeholder="e.g., KL Express" required>
+      
+      <label>Description:</label>
+      <textarea id="admin-description" rows="3" placeholder="Route details" required></textarea>
+      
+      <label>From:</label>
+      <select id="admin-from" required>
+        <option value="">Select Departure</option>
+        <option value="Kuala Lumpur">Kuala Lumpur</option>
+        <option value="Penang">Penang</option>
+        <option value="Johor Bahru">Johor Bahru</option>
+        <option value="Melaka">Melaka</option>
+        <option value="Ipoh">Ipoh</option>
+        <option value="Kuantan">Kuantan</option>
+        <option value="Seremban">Seremban</option>
+        <option value="Alor Setar">Alor Setar</option>
+        <option value="Georgetown">Georgetown</option>
+      </select>
+      
+      <label>To:</label>
+      <select id="admin-to" required>
+        <option value="">Select Destination</option>
+        <option value="Kuala Lumpur">Kuala Lumpur</option>
+        <option value="Penang">Penang</option>
+        <option value="Johor Bahru">Johor Bahru</option>
+        <option value="Melaka">Melaka</option>
+        <option value="Ipoh">Ipoh</option>
+        <option value="Kuantan">Kuantan</option>
+        <option value="Seremban">Seremban</option>
+        <option value="Alor Setar">Alor Setar</option>
+        <option value="Georgetown">Georgetown</option>
+      </select>
+      
+      <label>Time Slots (comma-separated, e.g., 08:00, 12:00, 18:00):</label>
+      <input type="text" id="admin-times" placeholder="08:00, 12:00, 18:00" required>
+      
+      <label>Maximum Seats per Bus:</label>
+      <input type="number" id="admin-seats" min="10" max="50" value="30" required>
+      
+      <button type="submit" class="btn primary">Create Route</button>
+      <button type="button" id="back-from-admin" class="btn secondary">Back</button>
+    </form>
+    
+    <h3 style="margin-top: 30px;">Existing Routes</h3>
+    <div id="admin-routes-list"></div>
+  </div>
+
+  <div id="info-page" class="hidden card">
+    <h3>About TripMate</h3>
+    <p>TripMate is your convenient travel companion for intercity bus travel across Malaysia. Browse routes, check real-time seat availability, and book your journey instantly all in one simple platform.</p>
+    <p>Find more on</p>
+    <a href = "https://github.com/sheldenmendes100">Shelden.GitHub</a>
+    <a href = "https://github.com/liang-z1">Liang.Github</a>
+    <button type="button" id="back-from-info" class="btn secondary">Back</button>
+  </div>
+
+  <div id="contact-page" class="hidden card">
+    <h3>Contact Us</h3>
+    <p>📍 Universiti Teknologi Petronas, Perak, Malaysia</p>
+    <p>📞 +60 123-456-789</p>
+    <p>📧 support@tripmate.com</p>
+    <button type="button" id="back-from-contact" class="btn secondary">Back</button>
+  </div>
+
+  <div id="report-page" class="hidden card">
+    <h3>Booking Reports</h3>
+    
+    <div style="margin: 20px 0;">
+      <h4>Total Bookings per Route</h4>
+      <canvas id="bookings-chart" width="400" height="200"></canvas>
+    </div>
+    
+    <div style="margin: 20px 0;">
+      <h4>Most Preferred Time Slots</h4>
+      <canvas id="timeslots-chart" width="400" height="200"></canvas>
+    </div>
+    
+    <div style="margin: 20px 0;">
+      <h4>Users by Route</h4>
+      <div id="users-by-route"></div>
+    </div>
+    
+    <button type="button" id="back-from-report" class="btn secondary">Back</button>
+  </div>
+
+  <footer>
+    <p>© 2025 TripMate | Developed by Liang and Shelden</p>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
